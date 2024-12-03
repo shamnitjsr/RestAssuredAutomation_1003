@@ -1,5 +1,6 @@
 package api.test;
 
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -14,6 +15,7 @@ public class UserTests {
 
 	User userPayload;
 	Faker faker;
+	
 
 	@BeforeClass
 	public void setUp() {
@@ -32,8 +34,19 @@ public class UserTests {
 	@Test(priority = 1)
 	public void testPOSTUser() {
 		Response response = UserEndPoints.createUser(userPayload);
-		response.then().log().all();
-		Assert.assertEquals(response.getStatusCode(), 200);
+		response.then().log().all()
+		//Assert.assertEquals(response.getStatusCode(), 200);
+		
+		//verify status code as 200
+	      .assertThat().statusCode(200)
+
+	      //verify body
+	      .body("Location", Matchers.equalTo("Makinac Island"))
+
+	      //verify header
+	      .header("Content-Length" , "57");
+		
+		
 	}
 	
 	@Test(priority=2)
